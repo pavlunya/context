@@ -1,18 +1,18 @@
 package fluc
 
 import (
-	"testing"
-	"github.com/stretchr/testify/assert"
 	"context"
+	"github.com/stretchr/testify/assert"
+	"testing"
 	"time"
 )
 
 const (
-	testKey1 = "k1"
+	testKey1   = "k1"
 	testValue1 = "v1"
-	testKey2 = "k2"
+	testKey2   = "k2"
 	testValue2 = "v2"
-	testKey3 = "k3"
+	testKey3   = "k3"
 )
 
 func TestConstructor(t *testing.T) {
@@ -50,11 +50,9 @@ func TestWithCancelGetter(t *testing.T) {
 	assert.IsType(t, context.CancelFunc(func() {}), cancel)
 }
 
-
 func TestWithTimeoutGetter(t *testing.T) {
 	fluentCtx := Context(context.Background())
 	ctx, cancel := fluentCtx.WithTimeout(time.Second)
 	assert.Implements(t, (*context.Context)(nil), ctx)
 	assert.IsType(t, context.CancelFunc(func() {}), cancel)
 }
-
