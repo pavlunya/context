@@ -7,6 +7,9 @@ import (
 )
 
 // Wrapper is a simple wrapper struct for context.
+// The main reason why this struct is public is godoc.org and its parsing rules,
+// it doesn't show docs for unexported structs, methods, vars, etc.
+// God bless golang development team.
 type Wrapper struct {
 	ctx context.Context
 }
@@ -34,7 +37,7 @@ func Context(ctxs ...interface{}) *Wrapper {
 // With wraps context.WithValue and returns Wrapper.
 // This method simplifies adding a lot of values to context:
 //
-// 	ctx := fluc.Context(ctx.Background()).
+// 	ctx := fluc.Context().
 // 		With("key1", "value1").
 // 		With("key2", "value2").
 // 		Get()
