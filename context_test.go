@@ -17,7 +17,7 @@ const (
 
 func TestConstructor(t *testing.T) {
 	fluentCtx := Context(context.Background())
-	assert.IsType(t, &chain{}, fluentCtx)
+	assert.IsType(t, &Wrapper{}, fluentCtx)
 }
 
 func TestGetter(t *testing.T) {
@@ -28,7 +28,7 @@ func TestGetter(t *testing.T) {
 
 func TestFluentValueSetter(t *testing.T) {
 	fluentCtx := Context(context.Background()).With(testKey1, testValue1).With(testKey2, testValue2)
-	assert.IsType(t, &chain{}, fluentCtx)
+	assert.IsType(t, &Wrapper{}, fluentCtx)
 
 	ctx := fluentCtx.Get()
 	assert.Exactly(t, testValue1, ctx.Value(testKey1))

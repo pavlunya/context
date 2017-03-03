@@ -6,17 +6,32 @@ import (
 	"time"
 )
 
-// chain is a wrapper for context.
-type chain struct {
+// Wrapper is a simple wrapper struct for context.
+type Wrapper struct {
 	ctx context.Context
 }
 
-// Context is a constructor, it returns new instance of chain.
-func Context(ctx context.Context) *chain {
-	return &chain{ctx}
+// Context is a constructor, it returns new instance of Wrapper.
+func Context(ctxs ...interface{}) *Wrapper {
+	if len(ctxs) == 0 {
+		return &Wrapper{context.Background()}
+	}
+
+	if len(ctxs) > 1 {
+		panic("To many arguments.")
+	}
+
+	ctx := ctxs[0]
+
+	switch ctx.(type) {
+	default:
+		panic("Only context.Context is expected as argument.")
+	case context.Context:
+		return &Wrapper{ctx.(context.Context)}
+	}
 }
 
-// With wraps context.WithValue and returns chain.
+// With wraps context.WithValue and returns Wrapper.
 // This method simplifies adding a lot of values to context:
 //
 // 	ctx := fluc.Context(ctx.Background()).
@@ -34,33 +49,33 @@ func Context(ctx context.Context) *chain {
 // 	fmt.Printf("Some epic value is %s", val)
 //
 // Injecting values to the context was never so awesome.
-func (c *chain) With(key interface{}, val interface{}) *chain {
+func (c *Wrapper) With(key interface{}, val interface{}) *Wrapper {
 	c.ctx = context.WithValue(c.ctx, key, val)
 	return c
 }
 
 // WithDeadline wraps context.WithDeadline
-func (c *chain) WithDeadline(deadline time.Time) (ctx context.Context, cancel context.CancelFunc) {
+func (c *Wrapper) WithDeadline(deadline time.Time) (ctx context.Context, cancel context.CancelFunc) {
 	ctx, cancel = context.WithDeadline(c.ctx, deadline)
 	c.ctx = ctx
 	return
 }
 
 // WithCancel wraps context.WithCancel
-func (c *chain) WithCancel() (ctx context.Context, cancel context.CancelFunc) {
+func (c *Wrapper) WithCancel() (ctx context.Context, cancel context.CancelFunc) {
 	ctx, cancel = context.WithCancel(c.ctx)
 	c.ctx = ctx
 	return
 }
 
 // WithTimeout wraps context.WithTimeout
-func (c *chain) WithTimeout(timeout time.Duration) (ctx context.Context, cancel context.CancelFunc) {
+func (c *Wrapper) WithTimeout(timeout time.Duration) (ctx context.Context, cancel context.CancelFunc) {
 	ctx, cancel = context.WithTimeout(c.ctx, timeout)
 	c.ctx = ctx
 	return
 }
 
 // Get returns context. Well, as expected.
-func (c *chain) Get() context.Context {
+func (c *Wrapper) Get() context.Context {
 	return c.ctx
 }
