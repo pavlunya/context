@@ -1,1 +1,1 @@
-# fluc
+# fluc [![Build Status](http://img.shields.io/travis/pavlunya/fluc.svg?style=flat-square)](https://travis-ci.org/pavlunya/fluc) [![Coverage Status](http://img.shields.io/coveralls/pavlunya/fluc.svg?style=flat-square)](https://coveralls.io/github/pavlunya/fluc) [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/pavlunya/fluc)
