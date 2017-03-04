@@ -3,7 +3,6 @@ language: go
 go:
     - 1.7
     - 1.8
-    - tip
 
 install:
     - go get golang.org/x/tools/cmd/cover
@@ -14,7 +13,3 @@ install:
 script:
     - go test -coverprofile=profile.cov
     - goveralls -coverprofile=profile.cov -service=travis-ci
-
-matrix:
-    allow_failures:
-        - go: tip
