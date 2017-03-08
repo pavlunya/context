@@ -7,12 +7,14 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-1b98e0.svg?style=flat-square)](https://raw.githubusercontent.com/pavlunya/fluc/master/LICENSE)
 
 **fluc** provides fluent interface wrapper to work with `context.Context()`. 
-The main idea is to simplify injection. 
+The main idea is to simplify variable injection. 
+
 Enough said, let's write some code.
 
 ```go
 ...
 
+// Here we're adding some services to the basic context (probably somewhere in main.go)
 ctx := fluc.Context().
     With("redisClient", rc).
     With("mongoSess", ms).
@@ -21,6 +23,7 @@ ctx := fluc.Context().
     
 ...
 
+// This is simple middleware to overwrite default (and empty) requests context
 func ContextInjector(ctx context.Context, h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		h.ServeHTTP(w, r.WithContext(ctx))
@@ -29,10 +32,12 @@ func ContextInjector(ctx context.Context, h http.Handler) http.Handler {
 
 ...
 
+// Wrapping handler
 http.ListenAndServe(":8080", ContextInjector(ctx, http.HandlerFunc(Handler)))
 
 ...
 
+// The handler as is
 func Handler(rw http.ResponseWriter, r *http.Request) {
 	ms, ok := r.Context().Value("mongoSess").(*mgo.Session)
 	if !ok {
@@ -43,15 +48,15 @@ func Handler(rw http.ResponseWriter, r *http.Request) {
 
 	...
 	
+	// Some work was done and we want add more variables to context
+	// and make it cancelable with timeout
 	ctx, cancel = fluc.Context(r.Context()).
 		With("user", user).
 		With("articles", articles).
 		WithTimeout(10 * time.Second)
 	defer cancel()
 		
-	someFunctionThatWorksHard(ctx)
-	
-	...
+	someFunctionThatWorksHardButCanBeCanceled(ctx)
 }
 
 ...
