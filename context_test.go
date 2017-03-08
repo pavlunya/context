@@ -15,9 +15,24 @@ const (
 	testKey3   = "k3"
 )
 
-func TestConstructor(t *testing.T) {
+func TestEmptyConstructor(t *testing.T) {
+	fluentCtx := Context()
+	assert.IsType(t, &Wrapper{}, fluentCtx)
+}
+
+func TestConstructorWithContext(t *testing.T) {
 	fluentCtx := Context(context.Background())
 	assert.IsType(t, &Wrapper{}, fluentCtx)
+}
+
+func TestConstructorWithInvalidArgs(t *testing.T) {
+	assert.Panics(t, func() {
+		_ = Context(nil)
+	})
+
+	assert.Panics(t, func() {
+		_ = Context(context.Background(), context.Background())
+	})
 }
 
 func TestGetter(t *testing.T) {
