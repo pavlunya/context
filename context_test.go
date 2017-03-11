@@ -42,7 +42,7 @@ func TestGetter(t *testing.T) {
 }
 
 func TestFluentValueSetter(t *testing.T) {
-	fluentCtx := Context(context.Background()).With(testKey1, testValue1).With(testKey2, testValue2)
+	fluentCtx := Context(context.Background()).WithValue(testKey1, testValue1).With(testKey2, testValue2)
 	assert.IsType(t, &Wrapper{}, fluentCtx)
 
 	ctx := fluentCtx.Get()

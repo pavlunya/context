@@ -57,6 +57,11 @@ func (c *Wrapper) With(key interface{}, val interface{}) *Wrapper {
 	return c
 }
 
+// Alias for With
+func (c *Wrapper) WithValue(key interface{}, val interface{}) *Wrapper {
+	return c.With(key, val)
+}
+
 // WithDeadline wraps context.WithDeadline
 func (c *Wrapper) WithDeadline(deadline time.Time) (ctx context.Context, cancel context.CancelFunc) {
 	ctx, cancel = context.WithDeadline(c.ctx, deadline)
